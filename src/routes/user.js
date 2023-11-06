@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
             password: password
         }
         const userResponse = await admin.auth().getUserByEmail(userData.email);
-        
+
         res.json(userResponse)
     } catch (error) {
         console.log(error)
@@ -57,6 +57,18 @@ router.get('/users', async (req, res) => {
             });
         });
         res.status(200).json(users)
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching users' });
+    }
+})
+
+router.get('/users/:uid', async (req, res) => {
+    try {
+        const uid = req.params.uid
+        const userRef = db.collection('users').doc(uid)
+        const usersSnapshot = await userRef.get()
+
+        res.status(200).json(usersSnapshot)
     } catch (error) {
         res.status(500).json({ error: 'Error fetching users' });
     }
