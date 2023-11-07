@@ -62,9 +62,14 @@ router.put('/task/:taskId', async (req, res) => {
       return res.status(404).json({ error: 'Task not found' });
     }
 
+    const updatedAssignedUsers = {
+      ...existingTask.data().assignedUsers,
+      ...assignedUsers
+    };
+
     const updatedTaskData = {
       taskName: taskName || existingTask.data().taskName,
-      assignedUsers: assignedUsers || existingTask.data().assignedUsers
+      assignedUsers: updatedAssignedUsers
     };
 
     await taskRef.update(updatedTaskData);
